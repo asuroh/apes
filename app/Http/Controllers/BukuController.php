@@ -90,7 +90,8 @@ class BukuController extends Controller
                             'jumlah_buku' => $value->jumlah_buku, 
                             'deskripsi' => $value->deskripsi, 
                             'lokasi' => $value->lokasi,
-                            'cover' => NULL];
+                            'cover' => NULL
+                        ];
 
                     Buku::create($insert[$key]);
                         
