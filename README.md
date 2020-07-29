@@ -7,6 +7,6 @@ cara install
 - php artisan migrate
 - php artisan db:seed
 
-akun admin
-username : admin123
-password : admin123
+akun admin :
+- username : admin123
+- password : admin123
