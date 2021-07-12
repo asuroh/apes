@@ -33,11 +33,11 @@ class HomeController extends Controller
         $buku      = Buku::get();
         if(Auth::user()->level == 'user')
         {
-            $datas = Transaksi::where('status', 'pinjam')
+            $datas = Transaksi::whereIn('status', ['pinjam', 'booking'])
                                 ->where('user_id', Auth::user()->id)
                                 ->get();
         } else {
-            $datas = Transaksi::where('status', 'pinjam')->get();
+            $datas = Transaksi::whereIn('status', ['pinjam', 'booking'])->get();
         }
         
         return view('home', compact('transaksi', "anggota", 'buku', 'datas'));

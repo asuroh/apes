@@ -48,13 +48,14 @@
               </ul>
             </div>
           </li>
-          @endif
+
           <li class="nav-item {{ setActive(['transaksi*']) }}">
             <a class="nav-link" href="{{route('transaksi.index')}}">
               <i class="menu-icon mdi mdi-backup-restore"></i>
               <span class="menu-title">Transaksi</span>
             </a>
           </li>
+          
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-laporan" aria-expanded="false" aria-controls="ui-laporan">
               <i class="menu-icon mdi mdi-table"></i>
@@ -77,5 +78,5 @@
               </ul>
             </div>
           </li>
-         
+          @endif
         </ul>

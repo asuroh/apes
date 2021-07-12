@@ -31,10 +31,10 @@ class TransaksiController extends Controller
     {
         if(Auth::user()->level == 'user')
         {
-            $datas = Transaksi::where('user_id', Auth::user()->id)
+            $datas = Transaksi::join('users', 'users.id', '=', 'transaksi.user_id')->where('user_id', Auth::user()->id)
                                 ->get();
         } else {
-            $datas = Transaksi::get();
+            $datas = Transaksi::join('users', 'users.id', '=', 'transaksi.user_id')->get();
         }
         return view('transaksi.index', compact('datas'));
     }
@@ -81,6 +81,14 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
+        $status = "";
+
+        if(Auth::user()->level == 'user'){
+            $status = "booking";
+        }else{
+            $status = "pinjam";
+        }
+
         $this->validate($request, [
             'kode_transaksi' => 'required|string|max:255',
             'tgl_pinjam' => 'required',
@@ -97,14 +105,13 @@ class TransaksiController extends Controller
                 'buku_id' => $request->get('buku_id'),
                 'user_id' => $request->get('anggota_id'),
                 'ket' => $request->get('ket'),
-                'status' => 'pinjam'
+                'status' => $status
             ]);
 
-        $transaksi->buku->where('id', $transaksi->buku_id)
-                        ->update([
-                            'jumlah_buku' => ($transaksi->buku->jumlah_buku - 1),
-                            ]);
-
+        $transaksi->buku->where('id', $transaksi->buku_id)->update([
+            'jumlah_buku' => ($transaksi->buku->jumlah_buku - 1),
+        ]);
+        
         alert()->success('Berhasil.','Data telah ditambahkan!');
         return redirect()->route('transaksi.index');
 
@@ -119,8 +126,7 @@ class TransaksiController extends Controller
     public function show($id)
     {
 
-        $data = Transaksi::findOrFail($id);
-
+        $data = Transaksi::join('users', 'users.id', '=', 'transaksi.user_id')->findOrFail($id);
 
         if((Auth::user()->level == 'user') && (Auth::user()->id != $data->user_id)) {
                 Alert::info('Oopss..', 'Anda dilarang masuk ke area ini.');
@@ -161,8 +167,8 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::find($id);
 
         $transaksi->update([
-                'status' => 'kembali'
-                ]);
+            'status' => $request->input('status')
+        ]);
 
         $transaksi->buku->where('id', $transaksi->buku->id)
                         ->update([

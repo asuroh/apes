@@ -87,6 +87,7 @@ class UserController extends Controller
             'name' => $request->input('name'),
             'username' => $request->input('username'),
             'email' => $request->input('email'),
+            'npm' => null,
             'level' => $request->input('level'),
             'password' => bcrypt(($request->input('password'))),
             'gambar' => $gambar

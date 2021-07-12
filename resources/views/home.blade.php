@@ -72,6 +72,7 @@
                 </div>
               </div>
             </div>
+            @if(Auth::user()->level == 'admin')
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
               <div class="card card-statistics">
                 <div class="card-body">
@@ -92,13 +93,18 @@
                 </div>
               </div>
             </div>
+          @endif
 </div>
+
 <div class="row" >
+  <div class="col-lg-2">
+      <a href="{{ route('transaksi.create') }}" class="btn btn-primary btn-rounded btn-fw"><i class="fa fa-plus"></i> Tambah Transaksi</a>
+  </div>
 <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
 
                 <div class="card-body">
-                  <h4 class="card-title">Data Transaksi sedang pinjam</h4>
+                  <h4 class="card-title">Data Transaksi Aktif</h4>
                   
                   <div class="table-responsive">
                     <table class="table table-striped" id="table">
@@ -153,18 +159,31 @@
                           <td>
                           @if($data->status == 'pinjam')
                             <label class="badge badge-warning">Pinjam</label>
-                          @else
+                          @elseif($data->status == 'booking')
+                            <label class="badge badge-success">Booking</label>
+                          @else($data->status == 'kembali')
                             <label class="badge badge-success">Kembali</label>
                           @endif
                           </td>
                           <td>
                           @if(Auth::user()->level == 'admin')
-                          <form action="{{ route('transaksi.update', $data->id) }}" method="post" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            {{ method_field('put') }}
-                            <button class="btn btn-info btn-sm" onclick="return confirm('Anda yakin data ini sudah kembali?')">Sudah Kembali
-                            </button>
-                          </form>
+                            @if($data->status == 'booking')
+                              <form action="{{ route('transaksi.update', $data->id) }}" method="post" enctype="multipart/form-data">
+                                {{ csrf_field() }}
+                                {{ method_field('put') }}
+                                <input id="status" type="hidden" class="form-control" name="status" value="pinjam" required>
+                                <button class="btn btn-info btn-sm" onclick="return confirm('Anda yakin data ini di Ambil?')">Di Ambil
+                                </button>
+                              </form>
+                            @else
+                              <form action="{{ route('transaksi.update', $data->id) }}" method="post" enctype="multipart/form-data">
+                              {{ csrf_field() }}
+                              {{ method_field('put') }}
+                              <input id="status" type="hidden" class="form-control" name="status" value="kembali" required>
+                              <button class="btn btn-info btn-sm" onclick="return confirm('Anda yakin data ini sudah kembali?')">Sudah Kembali
+                              </button>
+                            </form>
+                            @endif
                           @else
                           -
                           @endif

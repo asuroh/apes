@@ -83,7 +83,9 @@
                           <td>
                           @if($data->status == 'pinjam')
                             <label class="badge badge-warning">Pinjam</label>
-                          @else
+                          @elseif($data->status == 'booking')
+                            <label class="badge badge-success">Booking</label>
+                          @else($data->status == 'kembali')
                             <label class="badge badge-success">Kembali</label>
                           @endif
                           </td>
@@ -95,12 +97,21 @@
                           </button>
                           <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 30px, 0px);">
                           @if($data->status == 'pinjam')
-                          <form action="{{ route('transaksi.update', $data->id) }}" method="post" enctype="multipart/form-data">
-                            {{ csrf_field() }}
-                            {{ method_field('put') }}
-                            <button class="dropdown-item" onclick="return confirm('Anda yakin data ini sudah kembali?')"> Sudah Kembali
-                            </button>
-                          </form>
+                            <form action="{{ route('transaksi.update', $data->id) }}" method="post" enctype="multipart/form-data">
+                              {{ csrf_field() }}
+                              {{ method_field('put') }}
+                              <input id="status" type="hidden" class="form-control" name="status" value="kembali" required>
+                              <button class="dropdown-item" onclick="return confirm('Anda yakin data ini sudah kembali?')"> Sudah Kembali
+                              </button>
+                            </form>
+                          @elseif($data->status == 'booking')
+                            <form action="{{ route('transaksi.update', $data->id) }}" method="post" enctype="multipart/form-data">
+                                  {{ csrf_field() }}
+                                  {{ method_field('put') }}
+                                  <input id="status" type="hidden" class="form-control" name="status" value="pinjam" required>
+                                  <button class="dropdown-item" onclick="return confirm('Anda yakin data ini di Ambil?')">Di Ambil
+                                  </button>
+                            </form>
                           @endif
                             <form action="{{ route('transaksi.destroy', $data->id) }}" class="pull-left"  method="post">
                             {{ csrf_field() }}

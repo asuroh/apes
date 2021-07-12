@@ -46,7 +46,6 @@
                             <label for="anggota_id" class="col-md-4 control-label">Anggota</label>
                             <div class="col-md-6">
                                 <input id="anggota_nama" type="text" class="form-control" readonly="" value="{{$data->name}}">
-
                             </div>
                         </div>
 
